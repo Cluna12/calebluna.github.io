@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhancement 3 – Databases</title>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0e0e0e; --surface: #161616; --text: #d4d4d4; --text-bright: #ececec;
+            --muted: #707070; --accent: #c9a227; --accent-dim: rgba(201,162,39,0.12);
+            --border: #252525;
+        }
+        body { font-family: 'IBM Plex Mono', monospace; background: var(--bg); color: var(--text); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+        nav { position: sticky; top: 0; background: rgba(14,14,14,0.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); z-index: 100; padding: 0 2rem; }
+        nav .nav-inner { max-width: 880px; margin: 0 auto; display: flex; align-items: center; height: 52px; justify-content: space-between; }
+        nav .logo { font-family: 'Libre Baskerville', serif; font-weight: 700; font-size: 1rem; color: var(--text-bright); text-decoration: none; }
+        nav .back { font-size: 0.72rem; color: var(--muted); text-decoration: none; text-transform: uppercase; letter-spacing: 0.1em; transition: color 0.2s; }
+        nav .back:hover { color: var(--accent); }
+        .page-header { max-width: 880px; margin: 0 auto; padding: 5rem 2rem 3rem; }
+        .page-header .label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--accent); font-weight: 600; margin-bottom: 0.75rem; }
+        .page-header h1 { font-family: 'Libre Baskerville', serif; font-size: 2rem; font-weight: 700; color: var(--text-bright); margin-bottom: 1.5rem; }
+        .page-header .narrative { max-width: 650px; font-size: 0.85rem; line-height: 1.8; color: var(--muted); }
+        .divider { max-width: 880px; margin: 0 auto; border: none; border-top: 1px solid var(--border); }
+        .section { max-width: 880px; margin: 0 auto; padding: 3rem 2rem; }
+        .section h2 { font-family: 'Libre Baskerville', serif; font-size: 1.2rem; font-weight: 700; color: var(--text-bright); margin-bottom: 0.5rem; }
+        .section .file-label { font-size: 0.7rem; color: var(--accent); margin-bottom: 1rem; display: block; }
+        .code-block { background: var(--surface); border: 1px solid var(--border); padding: 1.5rem; overflow-x: auto; margin-bottom: 1.5rem; }
+        .code-block pre { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; line-height: 1.7; color: var(--text); white-space: pre; margin: 0; }
+        footer { max-width: 880px; margin: 0 auto; padding: 2.5rem 2rem; font-size: 0.68rem; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
+        @media (max-width: 600px) { .page-header h1 { font-size: 1.5rem; } .page-header { padding: 3.5rem 1.5rem 2rem; } .section { padding: 2.5rem 1.5rem; } }
+    </style>
+</head>
+<body>
+    <nav><div class="nav-inner"><a href="index.html" class="logo">Caleb Luna</a><a href="index.html" class="back">&larr; Portfolio</a></div></nav>
+
+    <section class="page-header">
+        <p class="label">Enhancement 03</p>
+        <h1>Databases</h1>
+        <div class="narrative">
+            <p>Narrative goes here.</p>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <section class="section">
+        <h2>Before Enhancement</h2>
+
+        <span class="file-label">travlr.js (Mongoose schema)</span>
+        <div class="code-block"><pre>const mongoose = require('mongoose');
+
+const tripSchema = new mongoose.Schema({
+  code: { type: String, required: true, index: true },
+  name: { type: String, required: true, index: true },
+  length: { type: String, required: true },
+  start: { type: Date, required: true },
+  resort: { type: String, required: true },
+  perPerson: { type: String, required: true },
+  image: { type: String, required: true },
+  description: { type: String, required: true }
+});
+
+const Trip = mongoose.model('trips', tripSchema);
+module.exports = Trip;</pre></div>
+
+        <span class="file-label">trips.json (seed data)</span>
+        <div class="code-block"><pre>[
+  {
+    "code": "GALR210214",
+    "name": "Gale Reef",
+    "length": "4 nights / 5 days",
+    "start": "2021-02-14T08:00:00Z",
+    "resort": "Emerald Bay, 3 stars",
+    "perPerson": "799.00",
+    "image": "reef1.jpg",
+    "description": "..."
+  },
+  {
+    "code": "DAWR210315",
+    "name": "Dawson's Reef",
+    "length": "4 nights / 5 days",
+    "start": "2021-03-15T08:00:00Z",
+    "resort": "Blue Lagoon, 4 stars",
+    "perPerson": "1199.00",
+    "image": "reef2.jpg",
+    "description": "..."
+  },
+  {
+    "code": "CLAR210621",
+    "name": "Claire's Reef",
+    "length": "4 nights / 5 days",
+    "start": "2021-06-21T08:00:00Z",
+    "resort": "Coral Sands, 5 stars",
+    "perPerson": "1999.00",
+    "image": "reef3.jpg",
+    "description": "..."
+  }
+]</pre></div>
+
+        <span class="file-label">trip-data.service.ts</span>
+        <div class="code-block"><pre>import { Inject, Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+import { Trip } from '../models/trip';
+import { User } from '../models/user';
+import { AuthResponse } from '../models/auth-response';
+import { BROWSER_STORAGE } from '../storage';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class TripDataService {
+
+  url = 'http://localhost:3000/api/trips';
+  baseUrl = 'http://localhost:3000/api';
+
+  constructor(
+    private http: HttpClient,
+    @Inject(BROWSER_STORAGE) private storage: Storage
+  ) {}
+
+  getTrips(): Observable&lt;Trip[]&gt; {
+    return this.http.get&lt;Trip[]&gt;(this.url);
+  }
+
+  getTrip(tripCode: string): Observable&lt;Trip[]&gt; {
+    return this.http.get&lt;Trip[]&gt;(
+        this.url + '/' + tripCode);
+  }
+
+  addTrip(formData: Trip): Observable&lt;Trip&gt; {
+    return this.http.post&lt;Trip&gt;(this.url, formData);
+  }
+
+  updateTrip(formData: Trip): Observable&lt;Trip&gt; {
+    return this.http.put&lt;Trip&gt;(
+        this.url + '/' + formData.code, formData);
+  }
+
+  login(user: User, passwd: string)
+      : Observable&lt;AuthResponse&gt; {
+    return this.handleAuthAPICall('login', user, passwd);
+  }
+
+  register(user: User, passwd: string)
+      : Observable&lt;AuthResponse&gt; {
+    return this.handleAuthAPICall(
+        'register', user, passwd);
+  }
+
+  handleAuthAPICall(endpoint: string, user: User,
+      passwd: string) : Observable&lt;AuthResponse&gt; {
+    let formData = {
+      name: user.name,
+      email: user.email,
+      password: passwd
+    };
+    return this.http.post&lt;AuthResponse&gt;(
+        this.baseUrl + '/' + endpoint, formData);
+  }
+}</pre></div>
+    </section>
+
+    <hr class="divider">
+
+    <section class="section">
+        <h2>After Enhancement</h2>
+
+        <span class="file-label">travlr.js (Mongoose schema)</span>
+        <div class="code-block"><pre>const mongoose = require('mongoose');
+
+const tripSchema = new mongoose.Schema({
+  code: { type: String, required: true, index: true },
+  name: { type: String, required: true, index: true },
+  length: { type: Number, required: true, min: 1 },
+  start: { type: Date, required: true },
+  resort: { type: String, required: true },
+  perPerson: { type: Number, required: true, min: 0 },
+  image: { type: String, required: true },
+  description: { type: String, required: true }
+}, {
+  timestamps: true
+});
+
+const Trip = mongoose.model('trips', tripSchema);
+module.exports = Trip;</pre></div>
+
+        <span class="file-label">trips.json (seed data)</span>
+        <div class="code-block"><pre>[
+  {
+    "code": "GALR210214",
+    "name": "Gale Reef",
+    "length": 4,
+    "start": "2021-02-14T08:00:00Z",
+    "resort": "Emerald Bay, 3 stars",
+    "perPerson": 799.00,
+    "image": "reef1.jpg",
+    "description": "..."
+  },
+  {
+    "code": "DAWR210315",
+    "name": "Dawson's Reef",
+    "length": 4,
+    "start": "2021-03-15T08:00:00Z",
+    "resort": "Blue Lagoon, 4 stars",
+    "perPerson": 1199.00,
+    "image": "reef2.jpg",
+    "description": "..."
+  },
+  {
+    "code": "CLAR210621",
+    "name": "Claire's Reef",
+    "length": 4,
+    "start": "2021-06-21T08:00:00Z",
+    "resort": "Coral Sands, 5 stars",
+    "perPerson": 1999.00,
+    "image": "reef3.jpg",
+    "description": "..."
+  }
+]</pre></div>
+
+        <span class="file-label">trip-data.service.ts</span>
+        <div class="code-block"><pre>import { Inject, Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+import { Trip } from '../models/trip';
+import { User } from '../models/user';
+import { AuthResponse } from '../models/auth-response';
+import { BROWSER_STORAGE } from '../storage';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class TripDataService {
+
+  url = 'http://localhost:3000/api/trips';
+  baseUrl = 'http://localhost:3000/api';
+
+  constructor(
+    private http: HttpClient,
+    @Inject(BROWSER_STORAGE) private storage: Storage
+  ) {}
+
+  getTrips(filters?: {
+    minPrice?: number,
+    maxPrice?: number,
+    sortBy?: string,
+    order?: string,
+    page?: number,
+    limit?: number
+  }): Observable&lt;Trip[]&gt; {
+    let queryParams = '';
+
+    if (filters) {
+      const params: string[] = [];
+      if (filters.minPrice)
+          params.push('minPrice=' + filters.minPrice);
+      if (filters.maxPrice)
+          params.push('maxPrice=' + filters.maxPrice);
+      if (filters.sortBy)
+          params.push('sortBy=' + filters.sortBy);
+      if (filters.order)
+          params.push('order=' + filters.order);
+      if (filters.page)
+          params.push('page=' + filters.page);
+      if (filters.limit)
+          params.push('limit=' + filters.limit);
+
+      if (params.length &gt; 0) {
+        queryParams = '?' + params.join('&amp;');
+      }
+    }
+
+    return this.http.get&lt;Trip[]&gt;(
+        this.url + queryParams);
+  }
+
+  getTrip(tripCode: string): Observable&lt;Trip[]&gt; {
+    return this.http.get&lt;Trip[]&gt;(
+        this.url + '/' + tripCode);
+  }
+
+  addTrip(formData: Trip): Observable&lt;Trip&gt; {
+    return this.http.post&lt;Trip&gt;(this.url, formData);
+  }
+
+  updateTrip(formData: Trip): Observable&lt;Trip&gt; {
+    return this.http.put&lt;Trip&gt;(
+        this.url + '/' + formData.code, formData);
+  }
+
+  login(user: User, passwd: string)
+      : Observable&lt;AuthResponse&gt; {
+    return this.handleAuthAPICall('login', user, passwd);
+  }
+
+  register(user: User, passwd: string)
+      : Observable&lt;AuthResponse&gt; {
+    return this.handleAuthAPICall(
+        'register', user, passwd);
+  }
+
+  handleAuthAPICall(endpoint: string, user: User,
+      passwd: string) : Observable&lt;AuthResponse&gt; {
+    let formData = {
+      name: user.name,
+      email: user.email,
+      password: passwd
+    };
+    return this.http.post&lt;AuthResponse&gt;(
+        this.baseUrl + '/' + endpoint, formData);
+  }
+}</pre></div>
+    </section>
+
+    <hr class="divider">
+    <footer>Caleb Luna &middot; CS-499</footer>
+</body>
+</html>

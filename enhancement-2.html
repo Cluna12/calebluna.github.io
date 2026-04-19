@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhancement 2 – Algorithms &amp; Data Structures</title>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0e0e0e; --surface: #161616; --text: #d4d4d4; --text-bright: #ececec;
+            --muted: #707070; --accent: #c9a227; --accent-dim: rgba(201,162,39,0.12);
+            --border: #252525;
+        }
+        body { font-family: 'IBM Plex Mono', monospace; background: var(--bg); color: var(--text); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+        nav { position: sticky; top: 0; background: rgba(14,14,14,0.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); z-index: 100; padding: 0 2rem; }
+        nav .nav-inner { max-width: 880px; margin: 0 auto; display: flex; align-items: center; height: 52px; justify-content: space-between; }
+        nav .logo { font-family: 'Libre Baskerville', serif; font-weight: 700; font-size: 1rem; color: var(--text-bright); text-decoration: none; }
+        nav .back { font-size: 0.72rem; color: var(--muted); text-decoration: none; text-transform: uppercase; letter-spacing: 0.1em; transition: color 0.2s; }
+        nav .back:hover { color: var(--accent); }
+        .page-header { max-width: 880px; margin: 0 auto; padding: 5rem 2rem 3rem; }
+        .page-header .label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--accent); font-weight: 600; margin-bottom: 0.75rem; }
+        .page-header h1 { font-family: 'Libre Baskerville', serif; font-size: 2rem; font-weight: 700; color: var(--text-bright); margin-bottom: 1.5rem; }
+        .page-header .narrative { max-width: 650px; font-size: 0.85rem; line-height: 1.8; color: var(--muted); }
+        .divider { max-width: 880px; margin: 0 auto; border: none; border-top: 1px solid var(--border); }
+        .section { max-width: 880px; margin: 0 auto; padding: 3rem 2rem; }
+        .section h2 { font-family: 'Libre Baskerville', serif; font-size: 1.2rem; font-weight: 700; color: var(--text-bright); margin-bottom: 0.5rem; }
+        .section .file-label { font-size: 0.7rem; color: var(--accent); margin-bottom: 1rem; display: block; }
+        .code-block { background: var(--surface); border: 1px solid var(--border); padding: 1.5rem; overflow-x: auto; margin-bottom: 1.5rem; }
+        .code-block pre { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; line-height: 1.7; color: var(--text); white-space: pre; margin: 0; }
+        footer { max-width: 880px; margin: 0 auto; padding: 2.5rem 2rem; font-size: 0.68rem; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
+        @media (max-width: 600px) { .page-header h1 { font-size: 1.5rem; } .page-header { padding: 3.5rem 1.5rem 2rem; } .section { padding: 2.5rem 1.5rem; } }
+    </style>
+</head>
+<body>
+    <nav><div class="nav-inner"><a href="index.html" class="logo">Caleb Luna</a><a href="index.html" class="back">&larr; Portfolio</a></div></nav>
+
+    <section class="page-header">
+        <p class="label">Enhancement 02</p>
+        <h1>Algorithms &amp; Data Structures</h1>
+        <div class="narrative">
+            <p>Narrative goes here.</p>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <section class="section">
+        <h2>Before Enhancement</h2>
+
+        <span class="file-label">trips.js (controller)</span>
+        <div class="code-block"><pre>const mongoose = require('mongoose');
+const Trip = require('../models/travlr');
+const Model = mongoose.model('trips');
+
+const tripsList = async(req, res) =&gt; {
+  const q = await Model
+    .find({})
+    .exec();
+
+  if(!q)
+  {
+    return res
+      .status(404)
+      .json(err);
+  } else {
+    return res
+      .status(200)
+      .json(q);
+  }
+};
+
+const tripsFindByCode = async(req, res) =&gt; {
+  const q = await Model
+    .find({'code' : req.params.tripCode})
+    .exec();
+
+  if(!q)
+  {
+    return res
+      .status(404)
+      .json(err);
+  } else {
+    return res
+      .status(200)
+      .json(q);
+  }
+};
+
+const tripsAddTrip = async(req, res) =&gt; {
+    const newTrip = new Model({
+        code: req.body.code,
+        name: req.body.name,
+        length: req.body.length,
+        start: req.body.start,
+        resort: req.body.resort,
+        perPerson: req.body.perPerson,
+        image: req.body.image,
+        description: req.body.description
+    });
+
+    const q = await newTrip.save();
+
+    if(!q)
+    {
+        return res
+            .status(400)
+            .json(err);
+    } else {
+        return res
+            .status(201)
+            .json(q);
+    }
+};
+
+const tripsUpdateTrip = async(req, res) =&gt; {
+    const q = await Model
+        .findOneAndUpdate(
+            { 'code' : req.params.tripCode },
+            {
+                code: req.body.code,
+                name: req.body.name,
+                length: req.body.length,
+                start: req.body.start,
+                resort: req.body.resort,
+                perPerson: req.body.perPerson,
+                image: req.body.image,
+                description: req.body.description
+            }
+        )
+        .exec();
+
+        if(!q)
+        {
+            return res
+                .status(400)
+                .json(err);
+        } else {
+            return res
+                .status(201)
+                .json(q);
+        }
+};
+
+module.exports = {
+  tripsList,
+  tripsFindByCode,
+  tripsAddTrip,
+  tripsUpdateTrip
+};</pre></div>
+
+        <span class="file-label">trip-listing.component.ts</span>
+        <div class="code-block"><pre>import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+
+import { TripCardComponent } from '../trip-card/trip-card.component';
+import { TripDataService } from '../services/trip-data.service';
+import { Trip } from '../models/trip';
+import { AuthenticationService } from '../services/authentication.service';
+
+@Component({
+  selector: 'app-trip-listing',
+  standalone: true,
+  imports: [CommonModule, TripCardComponent],
+  templateUrl: './trip-listing.component.html',
+  styleUrl: './trip-listing.component.css',
+  providers: [TripDataService]
+})
+export class TripListingComponent implements OnInit {
+
+  trips!: Trip[];
+  message: string = '';
+
+  constructor(
+    private tripDataService: TripDataService,
+    private router: Router,
+    private authenticationService: AuthenticationService
+  ) {
+    console.log('trip-listing constructor');
+  }
+
+  public addTrip(): void {
+    this.router.navigate(['add-trip']);
+  }
+
+  public isLoggedIn(): boolean {
+    return this.authenticationService.isLoggedIn();
+  }
+
+  private getStuff(): void {
+    this.tripDataService.getTrips()
+      .subscribe({
+        next: (value: any) =&gt; {
+          this.trips = value;
+          if (value.length &gt; 0) {
+            this.message = 'There are ' + value.length
+                + ' trips available.';
+          } else {
+            this.message = 'There were no trips retrieved'
+                + ' from the database';
+          }
+          console.log(this.message);
+        },
+        error: (error: any) =&gt; {
+          console.log('Error: ' + error);
+        }
+      });
+  }
+
+  ngOnInit(): void {
+    console.log('ngOnInit');
+    this.getStuff();
+  }
+}</pre></div>
+    </section>
+
+    <hr class="divider">
+
+    <section class="section">
+        <h2>After Enhancement</h2>
+
+        <span class="file-label">trips.js (controller)</span>
+        <div class="code-block"><pre>const mongoose = require('mongoose');
+const Trip = require('../models/travlr');
+const Model = mongoose.model('trips');
+
+// GET: /trips - lists all trips
+// Supports: minPrice, maxPrice, sortBy, order, page, limit
+const tripsList = async(req, res) =&gt; {
+  try {
+    let filter = {};
+
+    if (req.query.minPrice || req.query.maxPrice) {
+      filter.perPerson = {};
+      if (req.query.minPrice) {
+        filter.perPerson.$gte = Number(req.query.minPrice);
+      }
+      if (req.query.maxPrice) {
+        filter.perPerson.$lte = Number(req.query.maxPrice);
+      }
+    }
+
+    let sort = {};
+    if (req.query.sortBy) {
+      const order = req.query.order === 'desc' ? -1 : 1;
+      sort[req.query.sortBy] = order;
+    }
+
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 0;
+    const skip = (page - 1) * limit;
+
+    let query = Model.find(filter);
+
+    if (Object.keys(sort).length &gt; 0) {
+      query = query.sort(sort);
+    }
+
+    if (limit &gt; 0) {
+      query = query.skip(skip).limit(limit);
+    }
+
+    const q = await query.exec();
+
+    if (!q || q.length === 0) {
+      return res.status(404)
+        .json({ message: 'No trips found' });
+    }
+
+    return res.status(200).json(q);
+  } catch (err) {
+    return res.status(500)
+      .json({ message: 'Server error retrieving trips' });
+  }
+};
+
+// GET: /trips/:tripCode
+const tripsFindByCode = async(req, res) =&gt; {
+  try {
+    const q = await Model
+      .find({'code' : req.params.tripCode})
+      .exec();
+
+    if (!q || q.length === 0) {
+      return res.status(404)
+        .json({ message: 'Trip not found with code: '
+            + req.params.tripCode });
+    }
+
+    return res.status(200).json(q);
+  } catch (err) {
+    return res.status(500)
+      .json({ message: 'Server error retrieving trip' });
+  }
+};
+
+// POST: /trips
+const tripsAddTrip = async(req, res) =&gt; {
+  try {
+    const newTrip = new Model({
+        code: req.body.code,
+        name: req.body.name,
+        length: req.body.length,
+        start: req.body.start,
+        resort: req.body.resort,
+        perPerson: req.body.perPerson,
+        image: req.body.image,
+        description: req.body.description
+    });
+
+    const q = await newTrip.save();
+    return res.status(201).json(q);
+  } catch (err) {
+    return res.status(400)
+      .json({ message: 'Error creating trip: '
+          + err.message });
+  }
+};
+
+// PUT: /trips/:tripCode
+const tripsUpdateTrip = async(req, res) =&gt; {
+  try {
+    const q = await Model
+        .findOneAndUpdate(
+            { 'code' : req.params.tripCode },
+            {
+                code: req.body.code,
+                name: req.body.name,
+                length: req.body.length,
+                start: req.body.start,
+                resort: req.body.resort,
+                perPerson: req.body.perPerson,
+                image: req.body.image,
+                description: req.body.description
+            },
+            { new: true }
+        )
+        .exec();
+
+    if (!q) {
+      return res.status(404)
+        .json({ message: 'Trip not found with code: '
+            + req.params.tripCode });
+    }
+
+    return res.status(200).json(q);
+  } catch (err) {
+    return res.status(500)
+      .json({ message: 'Server error updating trip' });
+  }
+};
+
+// DELETE: /trips/:tripCode
+const tripsDeleteTrip = async(req, res) =&gt; {
+  try {
+    const q = await Model
+      .findOneAndDelete({ 'code' : req.params.tripCode })
+      .exec();
+
+    if (!q) {
+      return res.status(404)
+        .json({ message: 'Trip not found with code: '
+            + req.params.tripCode });
+    }
+
+    return res.status(200)
+      .json({ message: 'Trip deleted successfully' });
+  } catch (err) {
+    return res.status(500)
+      .json({ message: 'Server error deleting trip' });
+  }
+};
+
+module.exports = {
+  tripsList,
+  tripsFindByCode,
+  tripsAddTrip,
+  tripsUpdateTrip,
+  tripsDeleteTrip
+};</pre></div>
+
+        <span class="file-label">trip-listing.component.ts</span>
+        <div class="code-block"><pre>import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+
+import { TripCardComponent } from '../trip-card/trip-card.component';
+import { TripDataService } from '../services/trip-data.service';
+import { Trip } from '../models/trip';
+import { AuthenticationService } from '../services/authentication.service';
+
+@Component({
+  selector: 'app-trip-listing',
+  standalone: true,
+  imports: [CommonModule, TripCardComponent, FormsModule],
+  templateUrl: './trip-listing.component.html',
+  styleUrl: './trip-listing.component.css',
+  providers: [TripDataService]
+})
+export class TripListingComponent implements OnInit {
+
+  trips!: Trip[];
+  message: string = '';
+
+  // Filter and sort options
+  minPrice: number | null = null;
+  maxPrice: number | null = null;
+  sortBy: string = '';
+  sortOrder: string = 'asc';
+
+  constructor(
+    private tripDataService: TripDataService,
+    private router: Router,
+    private authenticationService: AuthenticationService
+  ) {
+    console.log('trip-listing constructor');
+  }
+
+  public addTrip(): void {
+    this.router.navigate(['add-trip']);
+  }
+
+  public isLoggedIn(): boolean {
+    return this.authenticationService.isLoggedIn();
+  }
+
+  public applyFilters(): void {
+    this.getTrips();
+  }
+
+  public clearFilters(): void {
+    this.minPrice = null;
+    this.maxPrice = null;
+    this.sortBy = '';
+    this.sortOrder = 'asc';
+    this.getTrips();
+  }
+
+  private getTrips(): void {
+    let filters: any = {};
+
+    if (this.minPrice) filters.minPrice = this.minPrice;
+    if (this.maxPrice) filters.maxPrice = this.maxPrice;
+    if (this.sortBy) {
+      filters.sortBy = this.sortBy;
+      filters.order = this.sortOrder;
+    }
+
+    this.tripDataService.getTrips(filters)
+      .subscribe({
+        next: (value: any) =&gt; {
+          this.trips = value;
+          if (value.length &gt; 0) {
+            this.message = 'There are ' + value.length
+                + ' trips available.';
+          } else {
+            this.message = 'There were no trips retrieved'
+                + ' from the database';
+          }
+          console.log(this.message);
+        },
+        error: (error: any) =&gt; {
+          console.log('Error: ' + error);
+        }
+      });
+  }
+
+  ngOnInit(): void {
+    console.log('ngOnInit');
+    this.getTrips();
+  }
+}</pre></div>
+    </section>
+
+    <hr class="divider">
+    <footer>Caleb Luna &middot; CS-499</footer>
+</body>
+</html>

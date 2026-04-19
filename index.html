@@ -1,14 +1,83 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Caleb Luna Portfolio</title>
-  </head>
-  
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caleb Luna – CS-499 ePortfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0e0e0e; --surface: #161616; --text: #d4d4d4; --text-bright: #ececec;
+            --muted: #707070; --accent: #c9a227; --accent-dim: rgba(201,162,39,0.12);
+            --border: #252525; --border-hover: #3a3a3a;
+        }
+        body { font-family: 'IBM Plex Mono', monospace; background: var(--bg); color: var(--text); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+        nav { position: sticky; top: 0; background: rgba(14,14,14,0.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); z-index: 100; padding: 0 2rem; }
+        nav .nav-inner { max-width: 880px; margin: 0 auto; display: flex; align-items: center; height: 52px; }
+        nav .logo { font-family: 'Libre Baskerville', serif; font-weight: 700; font-size: 1rem; color: var(--text-bright); text-decoration: none; letter-spacing: -0.02em; }
+        .hero { max-width: 880px; margin: 0 auto; padding: 6rem 2rem 4rem; }
+        .hero h1 { font-family: 'Libre Baskerville', serif; font-size: 2.8rem; font-weight: 700; line-height: 1.15; color: var(--text-bright); margin-bottom: 2rem; letter-spacing: -0.03em; }
+        .hero .intro { max-width: 600px; font-size: 0.88rem; line-height: 1.8; color: var(--muted); }
+        .section { max-width: 880px; margin: 0 auto; padding: 3rem 2rem; }
+        .section-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--accent); font-weight: 600; margin-bottom: 1.25rem; }
+        .section h2 { font-family: 'Libre Baskerville', serif; font-size: 1.35rem; font-weight: 700; color: var(--text-bright); margin-bottom: 1rem; letter-spacing: -0.02em; }
+        .section .desc { font-size: 0.82rem; color: var(--muted); margin-bottom: 1.5rem; line-height: 1.7; }
+        .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); }
+        .card { background: var(--surface); padding: 2rem; text-decoration: none; color: var(--text); transition: background 0.25s; }
+        .card:hover { background: #1c1c1c; }
+        .card .card-num { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); margin-bottom: 0.75rem; }
+        .card h3 { font-family: 'Libre Baskerville', serif; font-size: 1rem; font-weight: 700; color: var(--text-bright); margin-bottom: 0.6rem; letter-spacing: -0.01em; }
+        .card p { font-size: 0.78rem; color: var(--muted); line-height: 1.6; }
+        .card .arrow { display: inline-block; margin-top: 1.25rem; font-size: 0.72rem; color: var(--accent); font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; }
+        .code-review-link { display: inline-flex; align-items: center; gap: 0.6rem; background: var(--accent-dim); color: var(--accent); font-weight: 600; font-size: 0.78rem; padding: 0.7rem 1.2rem; text-decoration: none; letter-spacing: 0.04em; border: 1px solid rgba(201,162,39,0.2); transition: background 0.2s, border-color 0.2s; }
+        .code-review-link:hover { background: rgba(201,162,39,0.18); border-color: rgba(201,162,39,0.35); }
+        .divider { max-width: 880px; margin: 0 auto; border: none; border-top: 1px solid var(--border); }
+        footer { max-width: 880px; margin: 0 auto; padding: 2.5rem 2rem; font-size: 0.68rem; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
+        @media (max-width: 600px) { .hero h1 { font-size: 1.8rem; } .hero { padding: 4rem 1.5rem 3rem; } .section { padding: 2.5rem 1.5rem; } }
+    </style>
+</head>
 <body>
-  <h1>Caleb Luna – Computer Science ePortfolio</h1>
-
-  <p>Welcome to my professional portfolio created for CS-499.</p>
-
-  <p>This site will showcase my software engineering, algorithm, and database artifacts.</p>
+    <nav><div class="nav-inner"><a href="index.html" class="logo">Caleb Luna</a></div></nav>
+    <section class="hero">
+        <h1>Computer Science<br>ePortfolio</h1>
+        <div class="intro">
+            <p>Professional self-assessment goes here. This section will introduce who you are, your journey through the CS program, and how the artifacts below demonstrate your skills.</p>
+        </div>
+    </section>
+    <hr class="divider">
+    <section class="section">
+        <p class="section-label">Code Review</p>
+        <h2>Informal Code Review</h2>
+        <p class="desc">Video walkthrough of the original Travlr Getaways codebase and planned enhancements.</p>
+        <a href="#" class="code-review-link">&#9654;&ensp;Watch Code Review</a>
+    </section>
+    <hr class="divider">
+    <section class="section">
+        <p class="section-label">Artifact Enhancements</p>
+        <h2>Travlr Getaways</h2>
+        <div class="cards">
+            <a href="enhancement-1.html" class="card">
+                <p class="card-num">01</p>
+                <h3>Software Design &amp; Engineering</h3>
+                <p>Structural improvements, input validation middleware, and new DELETE route for full CRUD coverage.</p>
+                <span class="arrow">View &rarr;</span>
+            </a>
+            <a href="enhancement-2.html" class="card">
+                <p class="card-num">02</p>
+                <h3>Algorithms &amp; Data Structures</h3>
+                <p>Server-side filtering, sorting, and pagination logic with Angular front-end integration.</p>
+                <span class="arrow">View &rarr;</span>
+            </a>
+            <a href="enhancement-3.html" class="card">
+                <p class="card-num">03</p>
+                <h3>Databases</h3>
+                <p>Schema type corrections, Mongoose validators, timestamps, and seed data alignment.</p>
+                <span class="arrow">View &rarr;</span>
+            </a>
+        </div>
+    </section>
+    <hr class="divider">
+    <footer>Caleb Luna &middot; CS-499</footer>
 </body>
 </html>

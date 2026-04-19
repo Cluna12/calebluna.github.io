@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhancement 1 – Software Design &amp; Engineering</title>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0e0e0e; --surface: #161616; --text: #d4d4d4; --text-bright: #ececec;
+            --muted: #707070; --accent: #c9a227; --accent-dim: rgba(201,162,39,0.12);
+            --border: #252525;
+        }
+        body { font-family: 'IBM Plex Mono', monospace; background: var(--bg); color: var(--text); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+        nav { position: sticky; top: 0; background: rgba(14,14,14,0.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); z-index: 100; padding: 0 2rem; }
+        nav .nav-inner { max-width: 880px; margin: 0 auto; display: flex; align-items: center; height: 52px; justify-content: space-between; }
+        nav .logo { font-family: 'Libre Baskerville', serif; font-weight: 700; font-size: 1rem; color: var(--text-bright); text-decoration: none; }
+        nav .back { font-size: 0.72rem; color: var(--muted); text-decoration: none; text-transform: uppercase; letter-spacing: 0.1em; transition: color 0.2s; }
+        nav .back:hover { color: var(--accent); }
+        .page-header { max-width: 880px; margin: 0 auto; padding: 5rem 2rem 3rem; }
+        .page-header .label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--accent); font-weight: 600; margin-bottom: 0.75rem; }
+        .page-header h1 { font-family: 'Libre Baskerville', serif; font-size: 2rem; font-weight: 700; color: var(--text-bright); margin-bottom: 1.5rem; }
+        .page-header .narrative { max-width: 650px; font-size: 0.85rem; line-height: 1.8; color: var(--muted); }
+        .divider { max-width: 880px; margin: 0 auto; border: none; border-top: 1px solid var(--border); }
+        .section { max-width: 880px; margin: 0 auto; padding: 3rem 2rem; }
+        .section h2 { font-family: 'Libre Baskerville', serif; font-size: 1.2rem; font-weight: 700; color: var(--text-bright); margin-bottom: 0.5rem; }
+        .section .file-label { font-size: 0.7rem; color: var(--accent); margin-bottom: 1rem; display: block; }
+        .code-block { background: var(--surface); border: 1px solid var(--border); padding: 1.5rem; overflow-x: auto; margin-bottom: 1.5rem; }
+        .code-block pre { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; line-height: 1.7; color: var(--text); white-space: pre; margin: 0; }
+        footer { max-width: 880px; margin: 0 auto; padding: 2.5rem 2rem; font-size: 0.68rem; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
+        @media (max-width: 600px) { .page-header h1 { font-size: 1.5rem; } .page-header { padding: 3.5rem 1.5rem 2rem; } .section { padding: 2.5rem 1.5rem; } }
+    </style>
+</head>
+<body>
+    <nav><div class="nav-inner"><a href="index.html" class="logo">Caleb Luna</a><a href="index.html" class="back">&larr; Portfolio</a></div></nav>
+
+    <section class="page-header">
+        <p class="label">Enhancement 01</p>
+        <h1>Software Design &amp; Engineering</h1>
+        <div class="narrative">
+            <p>Narrative goes here.</p>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <section class="section">
+        <h2>Before Enhancement</h2>
+        <span class="file-label">index.js (API routes)</span>
+        <div class="code-block"><pre>const express = require('express');
+const router = express.Router();
+const jwt = require('jsonwebtoken');
+
+const tripsController = require('../controllers/trips');
+const authController = require('../controllers/authentication');
+
+function authenticateJWT(req, res, next) {
+    const authHeader = req.headers['authorization'];
+
+    if(authHeader == null)
+    {
+        console.log('Auth Header Required but NOT PRESENT!');
+        return res.sendStatus(401);
+    }
+
+   let headers = authHeader.split(' ');
+   if(headers.length &lt; 1)
+   {
+       console.log('Not enough tokens in Auth Header: ' + headers.length);
+       return res.sendStatus(501);
+   }
+
+    const token = authHeader.split(' ')[1];
+
+    if(token == null)
+    {
+        console.log('Null Bearer Token');
+        return res.sendStatus(401);
+    }
+
+    const verified = jwt.verify(token, process.env.JWT_SECRET, (err, verified) =&gt; {
+        if(err)
+        {
+            return res.sendStatus(401).json('Token Validation Error!');
+        }
+        req.auth = verified;
+    });
+    next();
+}
+
+router
+    .route("/trips")
+    .get(tripsController.tripsList)
+    .post(authenticateJWT, tripsController.tripsAddTrip);
+
+router
+    .route('/trips/:tripCode')
+    .get(tripsController.tripsFindByCode)
+    .put(authenticateJWT, tripsController.tripsUpdateTrip);
+
+router
+    .route('/register')
+    .post(authController.register);
+
+router
+    .route('/login')
+    .post(authController.login);
+
+module.exports = router;</pre></div>
+    </section>
+
+    <hr class="divider">
+
+    <section class="section">
+        <h2>After Enhancement</h2>
+        <span class="file-label">index.js (API routes)</span>
+        <div class="code-block"><pre>const express = require('express');
+const router = express.Router();
+const jwt = require('jsonwebtoken');
+
+const tripsController = require('../controllers/trips');
+const authController = require('../controllers/authentication');
+
+function authenticateJWT(req, res, next) {
+    const authHeader = req.headers['authorization'];
+
+    if(authHeader == null)
+    {
+        console.log('Auth Header Required but NOT PRESENT!');
+        return res.sendStatus(401);
+    }
+
+    const token = authHeader.split(' ')[1];
+
+    if(token == null)
+    {
+        console.log('Null Bearer Token');
+        return res.sendStatus(401);
+    }
+
+    const verified = jwt.verify(token, process.env.JWT_SECRET, (err, verified) =&gt; {
+        if(err)
+        {
+            return res.sendStatus(401).json('Token Validation Error!');
+        }
+        req.auth = verified;
+    });
+    next();
+}
+
+// Input validation middleware
+function validateTrip(req, res, next) {
+    const { code, name, length, start, resort,
+            perPerson, image, description } = req.body;
+
+    if (!code || !name || !length || !start ||
+        !resort || !perPerson || !image || !description) {
+        return res.status(400)
+            .json({ message: 'All trip fields are required' });
+    }
+
+    if (isNaN(perPerson) || Number(perPerson) &lt; 0) {
+        return res.status(400)
+            .json({ message: 'perPerson must be a positive number' });
+    }
+
+    if (isNaN(Date.parse(start))) {
+        return res.status(400)
+            .json({ message: 'start must be a valid date' });
+    }
+
+    next();
+}
+
+router
+    .route("/trips")
+    .get(tripsController.tripsList)
+    .post(authenticateJWT, validateTrip, tripsController.tripsAddTrip);
+
+router
+    .route('/trips/:tripCode')
+    .get(tripsController.tripsFindByCode)
+    .put(authenticateJWT, validateTrip, tripsController.tripsUpdateTrip)
+    .delete(authenticateJWT, tripsController.tripsDeleteTrip);
+
+router
+    .route('/register')
+    .post(authController.register);
+
+router
+    .route('/login')
+    .post(authController.login);
+
+module.exports = router;</pre></div>
+    </section>
+
+    <hr class="divider">
+    <footer>Caleb Luna &middot; CS-499</footer>
+</body>
+</html>
