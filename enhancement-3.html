@@ -22,6 +22,7 @@
         .page-header .label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--accent); font-weight: 600; margin-bottom: 0.75rem; }
         .page-header h1 { font-family: 'Libre Baskerville', serif; font-size: 2rem; font-weight: 700; color: var(--text-bright); margin-bottom: 1.5rem; }
         .page-header .narrative { max-width: 650px; font-size: 0.85rem; line-height: 1.8; color: var(--muted); }
+        .page-header .narrative p { margin-bottom: 1rem; }
         .divider { max-width: 880px; margin: 0 auto; border: none; border-top: 1px solid var(--border); }
         .section { max-width: 880px; margin: 0 auto; padding: 3rem 2rem; }
         .section h2 { font-family: 'Libre Baskerville', serif; font-size: 1.2rem; font-weight: 700; color: var(--text-bright); margin-bottom: 0.5rem; }
@@ -39,7 +40,9 @@
         <p class="label">Enhancement 03</p>
         <h1>Databases</h1>
         <div class="narrative">
-            <p>Narrative goes here.</p>
+            <p>This is the Travlr Getaways web application I built in CS-465 last semester. It uses MongoDB, Express, Angular, and Node.js. It has a customer website and an admin page where authenticated users can manage travel trip listings through an API.</p>
+            <p>I picked this project for the database enhancement because the original schema had fields typed incorrectly. The perPerson field was stored as a String when it should have been a Number, and length was the same way. I changed both to Number with min validators so the database itself rejects bad data. I added Mongoose timestamps so every record automatically tracks when it was created and last updated. I also updated the seed data in trips.json to match the corrected schema so the values are actual numbers instead of quoted strings.</p>
+            <p>I learned why storing prices as strings instead of numbers causes real problems when you need to filter or sort. A string sort on prices puts "1199.00" before "799.00" because it compares character by character. The challenge was that changes in this category affected the others since changing perPerson to a number meant updating the seed data and making sure the frontend and filtering logic still worked. This enhancement covers course outcome 4 about using well-founded techniques and tools through correct schema design, and course outcome 5 about security through database-level validation.</p>
         </div>
     </section>
 
