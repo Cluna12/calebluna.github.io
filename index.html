@@ -18,7 +18,8 @@
         nav .logo { font-family: 'Libre Baskerville', serif; font-weight: 700; font-size: 1rem; color: var(--text-bright); text-decoration: none; letter-spacing: -0.02em; }
         .hero { max-width: 880px; margin: 0 auto; padding: 6rem 2rem 4rem; }
         .hero h1 { font-family: 'Libre Baskerville', serif; font-size: 2.8rem; font-weight: 700; line-height: 1.15; color: var(--text-bright); margin-bottom: 2rem; letter-spacing: -0.03em; }
-        .hero .intro { max-width: 600px; font-size: 0.88rem; line-height: 1.8; color: var(--muted); }
+        .hero .intro { max-width: 680px; font-size: 0.85rem; line-height: 1.85; color: var(--muted); }
+        .hero .intro p { margin-bottom: 1.25rem; }
         .section { max-width: 880px; margin: 0 auto; padding: 3rem 2rem; }
         .section-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--accent); font-weight: 600; margin-bottom: 1.25rem; }
         .section h2 { font-family: 'Libre Baskerville', serif; font-size: 1.35rem; font-weight: 700; color: var(--text-bright); margin-bottom: 1rem; letter-spacing: -0.02em; }
@@ -39,20 +40,35 @@
 </head>
 <body>
     <nav><div class="nav-inner"><a href="index.html" class="logo">Caleb Luna</a></div></nav>
+
     <section class="hero">
         <h1>Computer Science<br>ePortfolio</h1>
         <div class="intro">
-            <p>Professional self-assessment goes here. This section will introduce who you are, your journey through the CS program, and how the artifacts below demonstrate your skills.</p>
+            <p>Completing the computer science program at SNHU and building this ePortfolio has helped me identify where my strengths are and where I want to focus professionally. The coursework gave me hands-on experience across the full development stack, and the capstone project pushed me to revisit earlier work and evaluate it against what I know now. Going back through code I wrote in previous semesters and recognizing issues I missed the first time showed me how much my ability to assess and improve software has grown.</p>
+
+            <p>In one of my courses I worked on a group project where three of us built a full-stack application together. We divided the work by layer, with one person handling MongoDB and the CRUD operations, another building out the frontend styling and layout, and the third focusing on the backend logic while staying in close communication with the database person. That experience taught me how important it is to coordinate across layers and communicate clearly about how each piece connects, since a change in the database schema or an API response format affects everyone else's work.</p>
+
+            <p>Working with data structures and algorithms was a focus during the capstone enhancements. Adding server-side filtering, sorting, and pagination to the Travlr Getaways API required building query logic that handled any combination of parameters without breaking. That meant working with MongoDB operators for range filtering and chaining sort, skip, and limit operations on Mongoose queries to return the right subset of data.</p>
+
+            <p>The software engineering and database work during the capstone reinforced how connected the layers of an application are. Fixing schema types, adding validation, implementing error handling, and completing CRUD coverage with a DELETE endpoint all improved the reliability of the application. Changing a single field type in the Mongoose schema required updates to the seed data, the controllers, and the frontend service to keep everything consistent.</p>
+
+            <p>Security came up directly during the capstone when I found that the original Travlr code had error handlers referencing undefined variables, which would crash the server and could expose internals to users. Adding try/catch blocks, input validation middleware, and correct HTTP status codes were straightforward fixes, but recognizing why they matter from a security standpoint was the real growth.</p>
+
+            <p>The three enhancements in this portfolio all come from the Travlr Getaways application built in CS-465, with each one targeting a different layer. The software design enhancement improved code structure and reliability through validation middleware and proper error handling. The algorithms enhancement added query logic for filtering, sorting, and pagination on the backend with Angular integration on the frontend. The database enhancement corrected schema field types, added Mongoose validators and timestamps, and aligned the seed data. Together they demonstrate the ability to take an existing codebase, identify problems across the full stack, and improve it systematically.</p>
         </div>
     </section>
+
     <hr class="divider">
+
     <section class="section">
         <p class="section-label">Code Review</p>
         <h2>Informal Code Review</h2>
         <p class="desc">Video walkthrough of the original Travlr Getaways codebase and planned enhancements.</p>
-        <a href="#" class="code-review-link">&#9654;&ensp;Watch Code Review</a>
+        <a href="https://youtu.be/ZANFVwtoBGk" target="_blank" class="code-review-link">&#9654;&ensp;Watch Code Review</a>
     </section>
+
     <hr class="divider">
+
     <section class="section">
         <p class="section-label">Artifact Enhancements</p>
         <h2>Travlr Getaways</h2>
@@ -77,7 +93,9 @@
             </a>
         </div>
     </section>
+
     <hr class="divider">
+
     <footer>Caleb Luna &middot; CS-499</footer>
 </body>
 </html>
